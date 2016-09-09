@@ -1,24 +1,45 @@
-FROM postgres:9.5
+FROM clojure:alpine
 
-COPY database.tar.gz /database.tar.gz
-COPY jex-db.tar.gz /jex-db.tar.gz
-COPY metadata-db.tar.gz /metadata-db.tar.gz
-COPY notification-db.tar.gz /notification-db.tar.gz
-COPY permissions-db.tar.gz /permissions-db.tar.gz
-
-RUN apt-get update && apt-get install -y \
-  openjdk-7-jre-headless \
-  postgresql-client-9.5 \
-  && rm -rf /var/lib/apt/lists/*
+RUN apk add --update git && \
+    rm -rf /var/cache/apk
 
 ARG git_commit=unknown
-ARG buildenv_git_commit=unknown
 ARG version=unknown
 LABEL org.iplantc.de.facepalm.git-ref="$git_commit" \
-      org.iplantc.de.facepalm.version="$version" \
-      org.iplantc.de.buildenv.git-ref="$buildenv_git_commit"
+      org.iplantc.de.facepalm.version="$version"
 
-COPY target/facepalm-standalone.jar /
+COPY . /usr/src/app
 
-ENTRYPOINT ["java", "-jar", "facepalm-standalone.jar"]
-CMD [ "--help" ]
+RUN git clone https://github.com/cyverse-de/de-db.git /de-db && \
+    cd /de-db && \
+    git checkout dev && \
+    ./build.sh && \
+    mv database.tar.gz /usr/src/app/database.tar.gz
+
+RUN git clone https://github.com/cyverse-de/metadata-db.git /metadata-db && \
+    cd /metadata-db && \
+    git checkout dev && \
+    ./build.sh && \
+    mv metadata-db.tar.gz /usr/src/app/metadata-db.tar.gz
+    
+RUN git clone https://github.com/cyverse-de/notifications-db.git /notifications-db && \
+    cd /notifications-db && \
+    git checkout dev && \
+    ./build.sh && \
+    mv notification-db.tar.gz /usr/src/app/notification-db.tar.gz
+    
+RUN git clone https://github.com/cyverse-de/permissions-db.git /permissions-db && \
+    cd /permissions-db && \
+    git checkout dev && \
+    ./build.sh && \
+    mv permissions-db.tar.gz /usr/src/app/permissions-db.tar.gz
+    
+WORKDIR /usr/src/app
+
+RUN lein uberjar && \
+    cp target/facepalm-standalone.jar .
+
+RUN ln -s "/usr/bin/java" "/bin/facepalm"
+
+ENTRYPOINT ["facepalm", "-jar", "facepalm-standalone.jar"]
+CMD ["--help"]
