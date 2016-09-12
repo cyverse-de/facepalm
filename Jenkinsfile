@@ -15,7 +15,7 @@ node {
 
     dockerRepo = "${dockerUser}/${repo}:${env.BRANCH_NAME}"
 
-    sh "docker build --rm --build-arg git_commit=${git_commit} --build-arg version=${version} -t ${dockerRepo} ."
+    sh "docker build --rm --build-arg git_commit=${git_commit} --build-arg version=${version} --build-arg branch=${env.BRANCH_NAME} -t ${dockerRepo} ."
 
 
     stage "Test"
