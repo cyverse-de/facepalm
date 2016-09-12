@@ -1,3 +1,4 @@
+#!groovy
 def repo = "facepalm"
 def dockerUser = "discoenv"
 
