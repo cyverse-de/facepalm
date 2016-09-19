@@ -3,13 +3,12 @@ FROM clojure:alpine
 RUN apk add --update git && \
     rm -rf /var/cache/apk
 
-ARG git_commit=unknown
-ARG version=unknown
-
-LABEL org.cyverse.git-ref="$git_commit"
-LABEL org.cyverse.version="$version"
-
 ARG branch=dev
+
+WORKDIR /usr/src/app
+
+COPY project.clj /usr/src/app/
+RUN lein deps
 
 COPY . /usr/src/app
 
@@ -46,3 +45,9 @@ RUN ln -s "/usr/bin/java" "/bin/facepalm"
 
 ENTRYPOINT ["facepalm", "-jar", "facepalm-standalone.jar"]
 CMD ["--help"]
+
+ARG git_commit=unknown
+ARG version=unknown
+
+LABEL org.cyverse.git-ref="$git_commit"
+LABEL org.cyverse.version="$version"
