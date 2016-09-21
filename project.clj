@@ -34,6 +34,7 @@
                  [postgresql "9.1-901-1.jdbc4"]
                  [slingshot "0.10.3"]
                  [clj-http "2.0.0"]]
-  :plugins [[lein-marginalia "0.7.1"]]
+  :plugins [[lein-marginalia "0.7.1"]
+            [test2junit "1.2.2"]]
   :aot :all
   :main facepalm.core)

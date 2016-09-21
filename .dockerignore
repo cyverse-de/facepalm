@@ -3,12 +3,13 @@ pom.xml
 /lib/
 /classes/
 /target/
-.lein-deps-sum
-.lein-plugins
+.lein-*
 *~
 database.tar.gz
 notification-db.tar.gz
 jex-db.tar.gz
 metadata-db.tar.gz
 permissions-db.tar.gz
+build.xml
+test2junit
 Jenkinsfile
