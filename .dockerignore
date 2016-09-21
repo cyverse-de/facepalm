@@ -13,3 +13,4 @@ permissions-db.tar.gz
 build.xml
 test2junit
 Jenkinsfile
+service.properties
