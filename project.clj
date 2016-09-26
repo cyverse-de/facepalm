@@ -28,7 +28,7 @@
                  [korma "0.4.0"
                   :exclusions [c3p0]]
                  [me.raynes/fs "1.4.6"]
-                 [org.cyverse/clj-jargon "2.8.0"]
+                 [log4j "1.2.16"]
                  [org.cyverse/clojure-commons "2.8.0"]
                  [org.cyverse/kameleon "2.8.1"]
                  [postgresql "9.1-901-1.jdbc4"]
