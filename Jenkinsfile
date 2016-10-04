@@ -15,7 +15,7 @@ node('docker') {
 
         dockerRepo = "test-${env.BUILD_TAG}"
 
-        sh "docker build --rm --build-arg branch=${env.BRANCH_NAME} --build-arg git_commit=${git_commit} --build-arg version=${version} -t ${dockerRepo} ."
+        sh "docker build --rm --no-cache --build-arg branch=${env.BRANCH_NAME} --build-arg git_commit=${git_commit} --build-arg version=${version} -t ${dockerRepo} ."
 
 
         dockerTestRunner = "test-${env.BUILD_TAG}"
