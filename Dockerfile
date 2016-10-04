@@ -3,7 +3,7 @@ FROM clojure:alpine
 RUN apk add --update git && \
     rm -rf /var/cache/apk
 
-ARG branch=dev
+ARG branch=master
 
 WORKDIR /usr/src/app
 
