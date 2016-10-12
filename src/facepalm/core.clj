@@ -8,7 +8,7 @@
         [kameleon.entities]
         [kameleon.queries]
         [kameleon.sql-reader :only [load-sql-file]]
-        [korma.core]
+        [korma.core :exclude [update]]
         [korma.db]
         [slingshot.slingshot :only [throw+ try+]])
   (:require [clojure.string :as string]
