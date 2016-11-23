@@ -5,8 +5,7 @@
         [clojure-commons.file-utils :only [with-temp-dir]]
         [facepalm.error-codes]
         [kameleon.core]
-        [kameleon.entities]
-        [kameleon.queries]
+        [kameleon.queries :only [current-db-version]]
         [kameleon.sql-reader :only [load-sql-file]]
         [korma.core :exclude [update]]
         [korma.db]
@@ -384,7 +383,7 @@
      (if extra-cfg
        (convert @admin-db-spec (load-cfg opts extra-cfg))
        (convert))
-     (insert version
+     (insert :version
              (values {:version new-version})))))
 
 (defn- update-database
