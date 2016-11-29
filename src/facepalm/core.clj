@@ -4,9 +4,7 @@
         [clojure.tools.cli :only [cli]]
         [clojure-commons.file-utils :only [with-temp-dir]]
         [facepalm.error-codes]
-        [kameleon.core]
-        [kameleon.entities]
-        [kameleon.queries]
+        [kameleon.queries :only [current-db-version]]
         [kameleon.sql-reader :only [load-sql-file]]
         [korma.core :exclude [update]]
         [korma.db]
@@ -18,7 +16,7 @@
             [facepalm.conversions :as cnv]
             [kameleon.pgpass :as pgpass]
             [me.raynes.fs :as fs])
-  (:import [java.io File IOException]
+  (:import [java.io IOException]
            [java.sql SQLException]
            [org.apache.log4j BasicConfigurator ConsoleAppender Level
             SimpleLayout]))
@@ -360,15 +358,6 @@
          (drop-while existing-version)
          (take-while wanted-version))))
 
-(defn- validate-update-versions
-  "Validates the list of versions to run database conversions for.  An
-   exception will be thrown if any are not compatible with the current version
-   of kameleon."
-  [versions]
-  (let [compatible-version (compatible-db-version)]
-    (dorun (map (partial incompatible-database-conversion compatible-version)
-                (remove #(<= (compare % compatible-version) 0) versions)))))
-
 (defn- load-cfg
   [opts cfg-name]
   (let [props (ref nil)]
@@ -384,7 +373,7 @@
      (if extra-cfg
        (convert @admin-db-spec (load-cfg opts extra-cfg))
        (convert))
-     (insert version
+     (insert :version
              (values {:version new-version})))))
 
 (defn- update-database
@@ -395,7 +384,6 @@
     (unpack-build-artifact dir (:filename opts))
     (set-conversions opts)
     (let [versions (get-update-versions (get-current-db-version) (:version opts))]
-      (validate-update-versions versions)
       (try+
        (dorun (map (partial do-conversion opts) versions))
        (catch Exception e

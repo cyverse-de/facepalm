@@ -11,7 +11,7 @@
       (string/trim (:out (sh "git" "rev-parse" "HEAD")))
       ""))
 
-(defproject org.cyverse/facepalm "2.8.1-SNAPSHOT"
+(defproject org.cyverse/facepalm "2.10.0-SNAPSHOT"
   :description "Command-line utility for DE database managment."
   :url "https://github.com/cyverse-de/facepalm"
   :license {:name "BSD"
@@ -30,7 +30,7 @@
                  [me.raynes/fs "1.4.6"]
                  [log4j "1.2.16"]
                  [org.cyverse/clojure-commons "2.8.0"]
-                 [org.cyverse/kameleon "2.8.2-SNAPSHOT"]
+                 [org.cyverse/kameleon "3.0.0"]
                  [postgresql "9.1-901-1.jdbc4"]
                  [slingshot "0.10.3"]
                  [clj-http "2.0.0"]]

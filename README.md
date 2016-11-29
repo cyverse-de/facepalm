@@ -210,14 +210,6 @@ password). Verify that the '.pgpass' file is formatted correctly and has an
 entry for the desired database. If you want the utility to prompt you for the
 password, be sure to run the utility in the foreground.
 
-### ::incompatible-database-conversion
-
-One of the database conversions in the database tarball has a version number
-that is greater than the maximum compatible database version defined in
-kameleon. Verify that the correct database tarball and facepalm version are
-being used. If everything appears to be correct, contact Core Software to ensure
-that kameleon has been updated correctly.
-
 ### Other Errors
 
 Other errors represent uncaught exceptions. The most likely cause of these
