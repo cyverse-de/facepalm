@@ -348,7 +348,7 @@
       ver)))
 
 (defn- sortable-version-keyfn [version-str]
-  (vec (map #(Integer/parseInt %) (string/split version-str #"[.:]"))))
+  (mapv #(Integer/parseInt %) (string/split version-str #"[.:]")))
 
 (defn- get-update-versions
   "Gets the list of versions to run database conversions for."
