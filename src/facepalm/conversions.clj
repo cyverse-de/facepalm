@@ -17,13 +17,18 @@
   [fname]
   (first (string/split fname #"\.")))
 
-(defn- split-on-underscore
+(defn- split-on-last-underscore
   [fname]
-  (string/split fname #"_"))
+  ; regex: underscore + negative lookahead specifying that no underscores follow it
+  ; limit of 2 returned strings
+  (string/split fname #"_(?!.*_)" 2))
 
 (defn- dotize
   [vstr]
-  (string/join "." (into [] vstr)))
+  (cond
+    (re-find #"_" vstr) (string/replace vstr #"_" ".")
+    (= (count vstr) 3)  (string/join "." (into [] vstr))
+    :else               (throw (Exception. "Version string must either be three digits or specify dot placement with underscores"))))
 
 (defn- fmt-version
   [[version-str date-str]]
@@ -51,7 +56,7 @@
   (-> fname
       fu/basename
       drop-extension
-      split-on-underscore
+      split-on-last-underscore
       fmt-version
       fmt-date
       db-version))
