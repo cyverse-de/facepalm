@@ -347,13 +347,17 @@
       "1.2.0:20120101.01"
       ver)))
 
+(defn- sortable-version-keyfn [version-str]
+  (vec (map #(Integer/parseInt %) (string/split version-str #"[.:]"))))
+
 (defn- get-update-versions
   "Gets the list of versions to run database conversions for."
   [current-version dest-version]
-  (let [sorted-versions  (sort (keys @conversions))
-        dest-version     (or dest-version (last sorted-versions))
-        existing-version #(<= (compare % current-version) 0)
-        wanted-version   #(<= (compare % dest-version) 0)]
+  (let [sorted-versions  (sort-by sortable-version-keyfn (keys @conversions))
+        dest-version     (sortable-version-keyfn (or dest-version (last sorted-versions)))
+        current-version  (sortable-version-keyfn current-version)
+        existing-version #(<= (compare (sortable-version-keyfn %) current-version) 0)
+        wanted-version   #(<= (compare (sortable-version-keyfn %) dest-version) 0)]
     (->> sorted-versions
          (drop-while existing-version)
          (take-while wanted-version))))
