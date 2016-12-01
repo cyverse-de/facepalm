@@ -5,6 +5,7 @@ pom.xml
 /target/
 .lein-*
 *~
+*.swp
 database.tar.gz
 notification-db.tar.gz
 jex-db.tar.gz
@@ -12,3 +13,4 @@ metadata-db.tar.gz
 permissions-db.tar.gz
 build.xml
 test2junit
+.nrepl-port
