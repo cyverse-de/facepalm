@@ -322,7 +322,7 @@
   "Applies the database initialization scripts to the database."
   []
   (try+
-   (dorun (map #(load-sql-files %) ["tables" "constraints" "views" "data" "functions"]))
+   (dorun (map #(load-sql-files %) ["types" "tables" "constraints" "views" "data" "functions"]))
    (catch Exception e
      (log-next-exception e)
      (throw+))))
