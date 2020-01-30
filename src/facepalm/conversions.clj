@@ -10,8 +10,8 @@
   "dependencies.clj")
 
 (def ^:private default-repositories
-  {"central" "http://repo1.maven.org/maven2"
-   "clojars" "http://clojars.org/repo/"})
+  {"central" "https://repo1.maven.org/maven2"
+   "clojars" "https://clojars.org/repo/"})
 
 (defn- drop-extension
   [fname]
