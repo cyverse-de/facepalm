@@ -22,7 +22,7 @@
                  [org.clojure/tools.cli "1.0.194"]
                  [org.clojure/tools.logging "1.1.0"]
                  [cheshire "5.10.0"]
-                 [com.cemerick/pomegranate "1.1.0"]
+                 [clj-commons/pomegranate "1.2.0"]
                  [fleet "0.10.2"]
                  [com.mchange/c3p0 "0.9.5.5"]
                  [korma "0.4.3"
