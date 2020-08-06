@@ -4,7 +4,8 @@
   (:require [clojure.string :as string]
             [clojure-commons.file-utils :as fu]
             [me.raynes.fs :as fs])
-  (:import [java.io PushbackReader]))
+  (:import [clojure.lang DynamicClassLoader]
+           [java.io PushbackReader]))
 
 (def ^:private dependency-filename
   "dependencies.clj")
@@ -12,6 +13,17 @@
 (def ^:private default-repositories
   {"central" "https://repo1.maven.org/maven2"
    "clojars" "https://clojars.org/repo/"})
+
+;; This function was copied from https://github.com/amperity/riemann/.
+(defn- ensure-dynamic-classloader
+  []
+  (let [thread (Thread/currentThread)
+        context-class-loader (.getContextClassLoader thread)
+        compiler-class-loader (.getClassLoader clojure.lang.Compiler)]
+    (when-not (instance? DynamicClassLoader context-class-loader)
+      (.setContextClassLoader
+       thread (DynamicClassLoader. (or context-class-loader
+                                       compiler-class-loader))))))
 
 (defn- drop-extension
   [fname]
@@ -26,9 +38,14 @@
 (defn- dotize
   [vstr]
   (cond
-    (re-find #"_" vstr) (string/replace vstr #"_" ".")
-    (= (count vstr) 3)  (string/join "." (into [] vstr))
-    :else               (throw (Exception. "Version string must either be three digits or specify dot placement with underscores"))))
+    (re-find #"_" vstr)
+    (string/replace vstr #"_" ".")
+
+    (= (count vstr) 3)
+    (string/join "." (into [] vstr))
+
+    :else
+    (throw (Exception. "Version string must either be three digits or specify dot placement with underscores"))))
 
 (defn- fmt-version
   [[version-str date-str]]
@@ -103,6 +120,7 @@
 
 (defn load-dependencies
   [opts]
+  (ensure-dynamic-classloader)
   (let [f (fs/file "conversions" dependency-filename)]
     (when (.isFile f)
       (let [{:keys [dependencies repositories]} (load-dependency-file f)]
